@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-export default function useDebounce(value: any, delay: number){
+// 添加泛型使传入的值和返回值保持一致
+export default function useDebounce<T>(value: T, delay: number): T{
   const [debValue, setDebValue] = useState(value);
   useEffect(() => {
     // 每次在value变化以后，设置一个定时器
@@ -9,6 +10,6 @@ export default function useDebounce(value: any, delay: number){
     return ()=>{
         clearTimeout(timer)
     }
-  }, [debValue]);
+  }, [value]);
   return debValue
 }

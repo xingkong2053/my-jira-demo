@@ -4,6 +4,10 @@ import { Param } from "./Index";
 export interface User{
   id?: string;
   name?: string;
+  email?: string;
+  title?: string;
+  organization?: string;
+  token?: string;
 }
 
 interface OwnProps {
