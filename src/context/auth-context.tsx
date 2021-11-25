@@ -1,6 +1,8 @@
 import React, { ReactNode, useContext, useState } from "react";
 import * as auth from '../auth-provider'
 import { User } from "../pages/ProjectList/SearchPanel";
+import { http } from "../utils/http";
+import useMount from "../hooks/useMount";
 
 const AuthContext = React.createContext<{
   user: User | null;
@@ -15,12 +17,27 @@ interface  AuthForm {
   password: string;
 }
 
+// 初始化时根据token获取user
+const bootstrapUser = async ()=>{
+  let user = null;
+  const token = auth.getToken();
+  if (token) {
+    const data = await http('me',{token});
+    user = data.user
+  }
+  return user
+}
+
 export const AuthProvider = ({ children }: {children: ReactNode})=>{
   const [user, setUser] = useState<User | null>(null);
-  const login = (form: AuthForm) => auth.login(form).then(user=>setUser(user))
+  const login = (form: AuthForm) => auth.login(form).then(user=>setUser(user))  // .then(setUser)
   const register = (form: AuthForm) => auth.register(form).then(user=>setUser(user))
   const logout = () => auth.logout().then(()=>{
       setUser(null)
+  })
+
+  useMount(()=>{
+    bootstrapUser().then(setUser)
   })
 
   return <AuthContext.Provider value={{user,login,register,logout}} children={children}/>

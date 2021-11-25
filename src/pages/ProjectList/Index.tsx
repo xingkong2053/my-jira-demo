@@ -5,6 +5,7 @@ import { cleanObject } from "../../utils";
 import qs from 'qs'
 import useMount from "../../hooks/useMount";
 import useDebounce from "../../hooks/useDebounce";
+import { useHttp } from "../../utils/http";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
@@ -31,21 +32,14 @@ const ProjectList: FunctionComponent<Props> = (props) => {
   const [param, setParam] = useState<Param>({name:'',personId:NaN});
   const [list, setList] = useState<Project[]>([]);
   const debParam = useDebounce(param,200);
+  const client = useHttp();
 
   useEffect(() => {
-    fetch(apiUrl+'/projects?'+qs.stringify(cleanObject(debParam))).then(async res=>{
-      if (res.ok) {
-        setList(await res.json())
-      }
-    })
+    client('projects',{data: cleanObject(debParam)}).then(setList)
   }, [debParam]);
 
   useMount(() => {
-    fetch(apiUrl+'/users').then(async res=>{
-      if (res.ok) {
-        setUsers(await res.json())
-      }
-    })
+    client('users').then(setUsers)
   });
 
   return (<div>
