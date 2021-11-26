@@ -5,38 +5,51 @@ import { Button, Dropdown, Menu } from "antd";
 import styled from "@emotion/styled";
 import { Row } from "./components/lib";
 import {ReactComponent as SoftwareLogo} from './assets/software-logo.svg'
+import { Routes, Route} from "react-router";
+import Project from "./pages/Project/Project";
+import { BrowserRouter } from "react-router-dom";
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
 const AuthenticatedApp: FunctionComponent<Props> = (props) => {
-  let { logout, user } = useAuth();
+
   return <Container>
-    <Header between>
-      <HeaderLeft gap>
-        {/* 以组件的形式渲染svg */}
-        <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
-        <h2>项目</h2>
-        <h2>用户</h2>
-      </HeaderLeft>
-      <HeaderRight>
-        <Dropdown
-          overlay={<Menu>
-            <Menu.Item key="logout">
-              <Button onClick={logout} type={'link'}>Logout</Button>
-            </Menu.Item>
-          </Menu>}
-        >
-          <Button type={'link'}>Hi, {user?.name}</Button>
-        </Dropdown>
-      </HeaderRight>
-    </Header>
+    <PageHeader/>
     <Main>
-      <ProjectList/>
+      <BrowserRouter>
+        <Routes>
+          <Route path={'/projects'} element={<ProjectList/>}/>
+          <Route path={'/projects/:projectId/*'} element={<Project/>}/>
+        </Routes>
+      </BrowserRouter>
     </Main>
   </Container>;
 };
+
+const PageHeader = ()=>{
+  let { logout, user } = useAuth();
+  return <Header between>
+    <HeaderLeft gap>
+      {/* 以组件的形式渲染svg */}
+      <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
+      <h2>项目</h2>
+      <h2>用户</h2>
+    </HeaderLeft>
+    <HeaderRight>
+      <Dropdown
+        overlay={<Menu>
+          <Menu.Item key="logout">
+            <Button onClick={logout} type={'link'}>Logout</Button>
+          </Menu.Item>
+        </Menu>}
+      >
+        <Button type={'link'}>Hi, {user?.name}</Button>
+      </Dropdown>
+    </HeaderRight>
+  </Header>
+}
 
 const Container = styled.div`
   display: grid;

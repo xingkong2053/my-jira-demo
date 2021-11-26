@@ -4,6 +4,7 @@ import { Project } from "./Index";
 import { Card, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { ColumnsType } from "antd/lib/table";
+import { Link } from "react-router-dom";
 
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
@@ -14,7 +15,7 @@ const List: FunctionComponent<ListProps> = (props) => {
 
   const columns: ColumnsType<Project> = [{
     title: '名称',
-    dataIndex: 'name',
+    render: (value,project) => <Link to={project.id + ''}>{project.name}</Link>,
     sorter: (a,b) => a.name.localeCompare(b.name)
   },{
     title: '部门',

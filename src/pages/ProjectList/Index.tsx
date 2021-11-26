@@ -10,7 +10,7 @@ import { useTitle } from "../../hooks/useTitle";
 export const apiUrl = process.env.REACT_APP_API_URL
 
 export interface Project{
-  id?: number;
+  id: number;
   name: string;
   personId?: string;
   organization?: string;
