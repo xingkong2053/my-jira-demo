@@ -11,15 +11,15 @@ export const apiUrl = process.env.REACT_APP_API_URL
 
 export interface Project{
   id?: number;
-  name?: string;
-  personId?: number;
+  name: string;
+  personId?: string;
   organization?: string;
   created?: bigint;
 }
 
 export interface Param{
   name?: string;
-  personId?: number;
+  personId?: string;
 }
 
 interface OwnProps {}
@@ -29,7 +29,7 @@ type Props = OwnProps;
 const ProjectList: FunctionComponent<Props> = (props) => {
 
   const [users, setUsers] = useState<User[]>([]);
-  const [param, setParam] = useState<Param>({name:'',personId:NaN});
+  const [param, setParam] = useState<Param>({name:'',personId:''});
   const [list, setList] = useState<Project[]>([]);
   const debParam = useDebounce(param,200);
   const client = useHttp();

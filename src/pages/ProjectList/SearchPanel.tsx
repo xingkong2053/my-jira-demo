@@ -1,8 +1,9 @@
 import React, { ChangeEvent, FunctionComponent } from "react";
 import { Param } from "./Index";
+import { Input, Select } from "antd";
 
 export interface User{
-  id?: string;
+  id: string;
   name?: string;
   email?: string;
   title?: string;
@@ -12,7 +13,7 @@ export interface User{
 
 interface OwnProps {
   users: User[]
-  param: User,
+  param: Param,
   setParam: React.Dispatch<Param>
 }
 
@@ -33,17 +34,17 @@ const SearchPanel: FunctionComponent<Props> = (props) => {
     })
   }
 
-  function selectChange(e: ChangeEvent<HTMLSelectElement>) {
-    setParam({...param,personId: +e.target.value})
+  function selectChange(value: string) {
+    setParam({...param,personId: value})
   }
 
   return (<div>
     <div>
-      <input type="text" value={param.name} onChange={handleInput}/>
-      <select value={param.id} onChange={selectChange}>
-        <option value="">负责人</option>
-        {users.map(u=> <option value={u.id} key={u.id}>{u.name}</option>)}
-      </select>
+      <Input type="text" value={param.name} onChange={handleInput}/>
+      <Select value={param.personId} onChange={selectChange}>
+        <Select.Option value="">负责人</Select.Option>
+        {users.map(u=> <Select.Option value={u.id} key={u.id}>{u.name}</Select.Option>)}
+      </Select>
     </div>
   </div>);
 };

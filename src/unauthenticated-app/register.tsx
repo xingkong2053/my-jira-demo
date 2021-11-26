@@ -1,5 +1,6 @@
-import React, { createRef, FormEvent, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { useAuth } from "../context/auth-context";
+import { Button, Form, Input } from "antd";
 
 interface OwnProps {}
 
@@ -7,29 +8,19 @@ type Props = OwnProps;
 
 const Regsiter: FunctionComponent<Props> = (props) => {
 
-  const usernameRef = createRef<HTMLInputElement>();
-  const passwordRef = createRef<HTMLInputElement>();
-  let { register, user } = useAuth();
+  const {register} = useAuth()
 
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const username = usernameRef.current?.value as string
-    const password = passwordRef.current?.value as string
-    register({username,password})
-  }
-
-  return <form onSubmit={handleSubmit}>
-    <div>
-      <label htmlFor="username">Username</label>
-      <input type="text" id={'username'} defaultValue={'admin'} ref={usernameRef}/>
-    </div>
-    <div>
-      <label htmlFor="password">Password</label>
-      <input type="password" id={'password'} defaultValue={'admin'} ref={passwordRef}/>
-    </div>
-    <button type={'submit'}>Register</button>
-  </form>;
+  return <Form onFinish={register}>
+    <Form.Item name={'username'} rules={[{required: true, message:'请输入用户名'}]}>
+      <Input type="text" id={'username'} defaultValue={'admin'}/>
+    </Form.Item>
+    <Form.Item name={'password'} rules={[{required: true, message:'请输入密码'}]}>
+      <Input type="password" id={'password'} defaultValue={'admin'}/>
+    </Form.Item>
+    <Form.Item>
+      <Button htmlType={'submit'} type={"primary"} shape={'round'}>Register</Button>
+    </Form.Item>
+  </Form>;
 };
 
 export default Regsiter;

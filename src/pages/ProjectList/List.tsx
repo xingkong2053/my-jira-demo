@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { User } from "./SearchPanel";
 import { Project } from "./Index";
+import { Card, Table } from "antd";
 
 interface OwnProps {
   users: User[],
@@ -11,22 +12,14 @@ type Props = OwnProps;
 
 const List: FunctionComponent<Props> = (props) => {
   let { list, users } = props;
-  return (<table>
-    <thead>
-      <tr>
-        <th>名称</th>
-        <th>负责人</th>
-      </tr>
-    </thead>
-    <tbody>
-    {
-      list.map(project=><tr key={project.id}>
-        <td>{project.name}</td>
-        <td>{users.find(user=>user.id === project.personId)?.name||'未知'}</td>
-      </tr>)
-    }
-    </tbody>
-  </table>);
+  return <Card><Table pagination={false} columns={[{
+    title: '名称',
+    dataIndex: 'name',
+    sorter: (a,b) => a.name.localeCompare(b.name)
+  },{
+    title: '',
+    render: (value, project) => <span>{users.find(user=>user.id === project.personId)?.name||'未知'}</span>
+  }]} dataSource={list}/></Card>
 };
 
 export default List;
