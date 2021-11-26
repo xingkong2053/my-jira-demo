@@ -3,6 +3,8 @@ import * as auth from '../auth-provider'
 import { User } from "../pages/ProjectList/SearchPanel";
 import { http } from "../utils/http";
 import useMount from "../hooks/useMount";
+import { QueryClient, QueryClientProvider } from "react-query";
+
 
 const AuthContext = React.createContext<{
   user: User | null;
@@ -40,7 +42,9 @@ export const AuthProvider = ({ children }: {children: ReactNode})=>{
     bootstrapUser().then(setUser)
   })
 
-  return <AuthContext.Provider value={{user,login,register,logout}} children={children}/>
+  return <QueryClientProvider client={new QueryClient()}>
+    <AuthContext.Provider value={{user,login,register,logout}} children={children}/>
+  </QueryClientProvider>
 }
 
 export const useAuth = ()=>{

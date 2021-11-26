@@ -2,7 +2,6 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import SearchPanel, { User } from "./SearchPanel";
 import List from "./List";
 import { cleanObject } from "../../utils";
-import qs from 'qs'
 import useMount from "../../hooks/useMount";
 import useDebounce from "../../hooks/useDebounce";
 import { useHttp } from "../../utils/http";
@@ -35,7 +34,7 @@ const ProjectList: FunctionComponent<Props> = (props) => {
   const client = useHttp();
 
   useEffect(() => {
-    client('projects',{data: cleanObject(debParam)}).then(setList)
+    client('projects',{data: cleanObject({...debParam})}).then(setList)
   }, [debParam]);
 
   useMount(() => {

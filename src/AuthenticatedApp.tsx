@@ -21,11 +21,13 @@ const AuthenticatedApp: FunctionComponent<Props> = (props) => {
         <h2>用户</h2>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown overlay={<Menu>
+        <Dropdown
+          overlay={<Menu>
             <Menu.Item key="logout">
               <Button onClick={logout} type={'link'}>Logout</Button>
             </Menu.Item>
-          </Menu>}>
+          </Menu>}
+        >
           <Button type={'link'}>Hi, {user?.name}</Button>
         </Dropdown>
       </HeaderRight>
