@@ -4,6 +4,8 @@ import { User } from "../pages/ProjectList/SearchPanel";
 import { http } from "../utils/http";
 import useMount from "../hooks/useMount";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useAsync } from "../hooks/useAsync";
+import { FullPageError, FullPageLoading } from "../components/lib";
 
 
 const AuthContext = React.createContext<{
@@ -27,19 +29,28 @@ const bootstrapUser = async ()=>{
     const data = await http('me',{token});
     user = data.user
   }
-  return user
+  return Promise.resolve(user)
 }
 
 export const AuthProvider = ({ children }: {children: ReactNode})=>{
-  const [user, setUser] = useState<User | null>(null);
+  let { data: user, isIdle, isLoading, isError, error ,run, setData: setUser,} = useAsync<User | null>();
+
+  useMount(()=>{
+    run(bootstrapUser())
+  })
+
+  if(isIdle || isLoading){
+    return <FullPageLoading/>
+  }
+
+  if(isError){
+    return error && <FullPageError error={error}/>
+  }
+
   const login = (form: AuthForm) => auth.login(form).then(user=>setUser(user))  // .then(setUser)
   const register = (form: AuthForm) => auth.register(form).then(user=>setUser(user))
   const logout = () => auth.logout().then(()=>{
-      setUser(null)
-  })
-
-  useMount(()=>{
-    bootstrapUser().then(setUser)
+    setUser(null)
   })
 
   return <QueryClientProvider client={new QueryClient()}>
