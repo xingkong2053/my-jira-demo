@@ -14,7 +14,7 @@ export interface Project{
   name: string;
   personId?: string;
   organization?: string;
-  created?: bigint;
+  created?: number;
 }
 
 export interface Param{
@@ -42,7 +42,7 @@ const ProjectList: FunctionComponent<Props> = (props) => {
     client('users').then(setUsers)
   });
 
-  return (<div>
+  return (<div style={{padding: '3.2rem'}}>
     <SearchPanel param={param} setParam={setParam} users={users}/>
     <List list={list} users={users}/>
   </div>);

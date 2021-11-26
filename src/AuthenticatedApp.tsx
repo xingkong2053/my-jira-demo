@@ -1,25 +1,33 @@
 import React, { FunctionComponent } from 'react';
 import ProjectList from "./pages/ProjectList/Index";
 import { useAuth } from "./context/auth-context";
-import { Button } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 import styled from "@emotion/styled";
 import { Row } from "./components/lib";
+import {ReactComponent as SoftwareLogo} from './assets/software-logo.svg'
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
 const AuthenticatedApp: FunctionComponent<Props> = (props) => {
-  let { logout } = useAuth();
+  let { logout, user } = useAuth();
   return <Container>
     <Header between>
       <HeaderLeft gap>
-        <h2>Logo</h2>
+        {/* 以组件的形式渲染svg */}
+        <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
         <h2>项目</h2>
         <h2>用户</h2>
       </HeaderLeft>
       <HeaderRight>
-        <Button onClick={logout} type={'link'}>Logout</Button>
+        <Dropdown overlay={<Menu>
+            <Menu.Item key="logout">
+              <Button onClick={logout} type={'link'}>Logout</Button>
+            </Menu.Item>
+          </Menu>}>
+          <Button type={'link'}>Hi, {user?.name}</Button>
+        </Dropdown>
       </HeaderRight>
     </Header>
     <Main>
@@ -33,13 +41,16 @@ const Container = styled.div`
   grid-template-rows: 6rem 1fr 6rem;
   grid-template-columns: 20rem 1fr 20rem;
   grid-template-areas: "header header header"
-                        "nav main aside"
+                        "main main main"
                         "footer footer footer";
   height: 100vh;
 `
 
 const Header = styled(Row)`
+  padding: 0 3.2rem;
   grid-area: header;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,.1);
+  z-index: 1;
 `
 
 const HeaderLeft = styled(Row)``

@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { User } from "./SearchPanel";
 import { Project } from "./Index";
 import { Card, Table } from "antd";
+import dayjs from "dayjs";
 
 interface OwnProps {
   users: User[],
@@ -17,8 +18,14 @@ const List: FunctionComponent<Props> = (props) => {
     dataIndex: 'name',
     sorter: (a,b) => a.name.localeCompare(b.name)
   },{
-    title: '',
+    title: '部门',
+    dataIndex: 'organization'
+  },{
+    title: '负责人',
     render: (value, project) => <span>{users.find(user=>user.id === project.personId)?.name||'未知'}</span>
+  },{
+    title: '创建时间',
+    render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
   }]} dataSource={list}/></Card>
 };
 
