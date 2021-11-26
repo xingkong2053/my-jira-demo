@@ -5,6 +5,10 @@ import { cleanObject } from "../../utils";
 import useMount from "../../hooks/useMount";
 import useDebounce from "../../hooks/useDebounce";
 import { useHttp } from "../../utils/http";
+import { Typography } from "antd";
+import { useAsync } from "../../hooks/useAsync";
+import { useProjects } from "../../hooks/apis/project";
+import { useUser } from "../../hooks/apis/user";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
@@ -27,23 +31,16 @@ type Props = OwnProps;
 
 const ProjectList: FunctionComponent<Props> = (props) => {
 
-  const [users, setUsers] = useState<User[]>([]);
   const [param, setParam] = useState<Param>({name:'',personId:''});
-  const [list, setList] = useState<Project[]>([]);
   const debParam = useDebounce(param,200);
-  const client = useHttp();
-
-  useEffect(() => {
-    client('projects',{data: cleanObject({...debParam})}).then(setList)
-  }, [debParam]);
-
-  useMount(() => {
-    client('users').then(setUsers)
-  });
+  let { error, isError, isLoading, projectList } = useProjects(debParam);
+  let { userList } = useUser();
 
   return (<div style={{padding: '3.2rem'}}>
-    <SearchPanel param={param} setParam={setParam} users={users}/>
-    <List list={list} users={users}/>
+    <SearchPanel param={param} setParam={setParam} users={userList}/>
+    {isError && <Typography.Text type={"danger"}>{error?.message}</Typography.Text>}
+    {/* loading为Table组件上的属性，通过属性继承的方式将其映射到List组件上 */}
+    <List loading={isLoading} users={userList} dataSource={projectList || []}/>
   </div>);
 };
 

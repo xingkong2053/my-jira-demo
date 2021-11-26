@@ -1,19 +1,18 @@
 import React, { FunctionComponent } from 'react';
 import { User } from "./SearchPanel";
 import { Project } from "./Index";
-import { Card, Table } from "antd";
+import { Card, Table, TableProps } from "antd";
 import dayjs from "dayjs";
+import { ColumnsType } from "antd/lib/table";
 
-interface OwnProps {
+// List属性继承antd.Table属性
+interface ListProps extends TableProps<Project>{
   users: User[],
-  list: Project[]
 }
 
-type Props = OwnProps;
+const List: FunctionComponent<ListProps> = (props) => {
 
-const List: FunctionComponent<Props> = (props) => {
-  let { list, users } = props;
-  return <Card><Table pagination={false} columns={[{
+  const columns: ColumnsType<Project> = [{
     title: '名称',
     dataIndex: 'name',
     sorter: (a,b) => a.name.localeCompare(b.name)
@@ -26,7 +25,10 @@ const List: FunctionComponent<Props> = (props) => {
   },{
     title: '创建时间',
     render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
-  }]} dataSource={list}/></Card>
+  }]
+
+  let { users } = props;
+  return <Card><Table pagination={false} columns={columns} {...props}/></Card>
 };
 
 export default List;

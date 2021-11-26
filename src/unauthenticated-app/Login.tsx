@@ -1,6 +1,7 @@
 import React, { createRef, FormEvent, FunctionComponent } from "react";
 import { useAuth } from "../context/auth-context";
-import { Button, Form, Input } from "antd";
+import { Alert, Button, Form, Input } from "antd";
+import { useAsync } from "../hooks/useAsync";
 
 interface OwnProps {}
 
@@ -9,13 +10,14 @@ type Props = OwnProps;
 const Login: FunctionComponent<Props> = (props) => {
 
   let { login } = useAuth();
+  let { error, isError, isLoading, run} = useAsync();
 
   const onFinish = (form: {username: string,password: string})=>{
-    console.log(form);
-    login(form)
+    run(login(form))
   }
 
   return <Form onFinish={onFinish} initialValues={{username: 'admin',password: 'admin'}}>
+    {isError && <Form.Item><Alert message={error?.message} type={"error"} showIcon/></Form.Item>}
     <Form.Item name={'username'}>
       <Input type="text" id={'username'}/>
     </Form.Item>
@@ -23,7 +25,7 @@ const Login: FunctionComponent<Props> = (props) => {
       <Input type="password" id={'password'}/>
     </Form.Item>
     <Form.Item>
-      <Button htmlType={'submit'} type={"primary"}>Login</Button>
+      <Button htmlType={'submit'} type={"primary"} loading={isLoading}>Login</Button>
     </Form.Item>
   </Form>;
 };
