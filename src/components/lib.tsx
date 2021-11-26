@@ -34,7 +34,7 @@ export const FullPageLoading = ()=><FullPage>
   <Spin size={"large"}/>
 </FullPage>
 
-export const FullPageError = ({ error }: { error?: Error}) => <FullPage>
+export const FullPageError = ({ error }: { error: Error | null}) => <FullPage>
   <DevTools/>
   <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
 </FullPage>
