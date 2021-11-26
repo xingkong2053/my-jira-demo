@@ -1,14 +1,11 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import SearchPanel, { User } from "./SearchPanel";
 import List from "./List";
-import { cleanObject } from "../../utils";
-import useMount from "../../hooks/useMount";
 import useDebounce from "../../hooks/useDebounce";
-import { useHttp } from "../../utils/http";
 import { Typography } from "antd";
-import { useAsync } from "../../hooks/useAsync";
 import { useProjects } from "../../hooks/apis/project";
 import { useUser } from "../../hooks/apis/user";
+import { useTitle } from "../../hooks/useTitle";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
@@ -30,7 +27,7 @@ interface OwnProps {}
 type Props = OwnProps;
 
 const ProjectList: FunctionComponent<Props> = (props) => {
-
+  useTitle('项目列表')
   const [param, setParam] = useState<Param>({name:'',personId:''});
   const debParam = useDebounce(param,200);
   let { error, isError, isLoading, projectList } = useProjects(debParam);

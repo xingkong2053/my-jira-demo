@@ -2,6 +2,7 @@ import React, { createRef, FormEvent, FunctionComponent } from "react";
 import { useAuth } from "../context/auth-context";
 import { Alert, Button, Form, Input } from "antd";
 import { useAsync } from "../hooks/useAsync";
+import { useTitle } from "../hooks/useTitle";
 
 interface OwnProps {}
 
@@ -11,6 +12,7 @@ const Login: FunctionComponent<Props> = (props) => {
 
   let { login } = useAuth();
   let { error, isError, isLoading, run} = useAsync();
+  useTitle('请登录')
 
   const onFinish = (form: {username: string,password: string})=>{
     run(login(form))
