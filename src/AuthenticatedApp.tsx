@@ -8,6 +8,7 @@ import {ReactComponent as SoftwareLogo} from './assets/software-logo.svg'
 import { Routes, Route} from "react-router";
 import Project from "./pages/Project/Project";
 import { BrowserRouter } from "react-router-dom";
+import { resetRoute } from "./utils";
 
 interface OwnProps {}
 
@@ -20,6 +21,7 @@ const AuthenticatedApp: FunctionComponent<Props> = (props) => {
     <Main>
       <BrowserRouter>
         <Routes>
+          <Route index element={<ProjectList/>}/>
           <Route path={'/projects'} element={<ProjectList/>}/>
           <Route path={'/projects/:projectId/*'} element={<Project/>}/>
         </Routes>
@@ -33,7 +35,9 @@ const PageHeader = ()=>{
   return <Header between>
     <HeaderLeft gap>
       {/* 以组件的形式渲染svg */}
-      <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
+      <Button type={'link'} onClick={resetRoute}>
+        <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
+      </Button>
       <h2>项目</h2>
       <h2>用户</h2>
     </HeaderLeft>

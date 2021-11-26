@@ -15,7 +15,7 @@ const List: FunctionComponent<ListProps> = (props) => {
 
   const columns: ColumnsType<Project> = [{
     title: '名称',
-    render: (value,project) => <Link to={project.id + ''}>{project.name}</Link>,
+    render: (value,project) => <Link to={'/projects/'+project.id}>{project.name}</Link>,
     sorter: (a,b) => a.name.localeCompare(b.name)
   },{
     title: '部门',
