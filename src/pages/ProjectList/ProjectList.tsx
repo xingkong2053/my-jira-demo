@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import SearchPanel, { User } from "./SearchPanel";
+import React, { FunctionComponent } from "react";
+import SearchPanel from "./SearchPanel";
 import List from "./List";
 import useDebounce from "../../hooks/useDebounce";
 import { Typography } from "antd";

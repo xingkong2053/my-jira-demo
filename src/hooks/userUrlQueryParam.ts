@@ -12,6 +12,7 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) =>{
     // 避免循环渲染
     useMemo(
       ()=>keys.reduce((prev,key)=> ({...prev,[key]:searchParams.get(key) || ''}),{} as {[key in string]: string | null}),
+      // eslint-disable-next-line
       [searchParams]
     ),
     (params: Partial<{ [key in K]: unknown }>)=>{

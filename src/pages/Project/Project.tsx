@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Link} from "react-router-dom";
-import { Route, Routes, Navigate } from "react-router";
+import { Route, Routes } from "react-router";
 import Dashboard from "./Dashboard";
 import Group from "./Group";
 
