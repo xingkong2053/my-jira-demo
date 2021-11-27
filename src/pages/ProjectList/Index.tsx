@@ -6,6 +6,7 @@ import { Typography } from "antd";
 import { useProjects } from "../../hooks/apis/project";
 import { useUser } from "../../hooks/apis/user";
 import { useTitle } from "../../hooks/useTitle";
+import { useUrlQueryParam } from "../../hooks/userUrlQueryParam";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
@@ -28,7 +29,8 @@ type Props = OwnProps;
 
 const ProjectList: FunctionComponent<Props> = (props) => {
   useTitle('项目列表')
-  const [param, setParam] = useState<Param>({name:'',personId:''});
+  // 从url中获取query对象
+  const [ param, setParam ] = useUrlQueryParam(['name','personId']);
   const debParam = useDebounce(param,200);
   let { error, isError, isLoading, projectList } = useProjects(debParam);
   let { userList } = useUser();
