@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMountedRef } from "./useMountedRef";
 
 interface State<D>{
   error: Error | null;
@@ -22,6 +23,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
   const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
     return ()=>{}
   })
+  const mountedRef = useMountedRef();
 
   const setData = (data: D) => {
     setState({
@@ -50,7 +52,11 @@ export const useAsync = <D>(initialState?: State<D>) => {
     })
     setState({...state,stat: 'loading'})
     return promise.then(data=>{
-      setData(data)
+      // 当组件已经挂载并且还没卸载时设置数据
+      // 防止在已卸载的组件上设置数据从而发生错误
+      if(mountedRef.current){
+        setData(data)
+      }
       return data
     }).catch(error=>{
       setError(error)
