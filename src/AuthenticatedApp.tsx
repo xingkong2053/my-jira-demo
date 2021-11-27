@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import ProjectList from "./pages/ProjectList/Index";
+import ProjectList from "./pages/ProjectList/ProjectList";
 import { useAuth } from "./context/auth-context";
 import { Button, Dropdown, Menu } from "antd";
 import styled from "@emotion/styled";

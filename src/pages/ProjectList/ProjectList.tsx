@@ -12,6 +12,7 @@ export const apiUrl = process.env.REACT_APP_API_URL
 
 export interface Project{
   id: number;
+  pin: boolean;
   name: string;
   personId?: string;
   organization?: string;
@@ -32,14 +33,14 @@ const ProjectList: FunctionComponent<Props> = (props) => {
   // 从url中获取query对象
   const [ param, setParam ] = useUrlQueryParam(['name','personId']);
   const debParam = useDebounce(param,200);
-  let { error, isError, isLoading, projectList } = useProjects(debParam);
+  let { error, isError, isLoading, projectList, retry } = useProjects(debParam);
   let { userList } = useUser();
 
   return (<div style={{padding: '3.2rem'}}>
     <SearchPanel param={param} setParam={setParam} users={userList}/>
     {isError && <Typography.Text type={"danger"}>{error?.message}</Typography.Text>}
     {/* loading为Table组件上的属性，通过属性继承的方式将其映射到List组件上 */}
-    <List loading={isLoading} users={userList} dataSource={projectList || []}/>
+    <List loading={isLoading} users={userList} dataSource={projectList || []} refresh={retry}/>
   </div>);
 };
 

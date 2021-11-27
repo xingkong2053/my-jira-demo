@@ -17,6 +17,11 @@ export const useAsync = <D>(initialState?: State<D>) => {
     ...defaultInitialState,
     ...initialState
   });
+  // useState直接传入函数的含义是，惰性初始化
+  // retry : ()=>void
+  const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
+    return ()=>{}
+  })
 
   const setData = (data: D) => {
     setState({
@@ -35,10 +40,14 @@ export const useAsync = <D>(initialState?: State<D>) => {
   }
 
   // run 用来触发异步请求
-  const run = (promise : Promise<D>)=>{
+  const run = (promise : Promise<D>, runConfig?: {retry: ()=>Promise<D>})=>{
     if (!promise || !promise.then) {
       throw new Error("请传入Promise类型数据");
     }
+    // 更新retry需要的操作
+    setRetry(()=>()=>{
+      runConfig && runConfig.retry && run(runConfig.retry(),{retry:runConfig.retry})
+    })
     setState({...state,stat: 'loading'})
     return promise.then(data=>{
       setData(data)
@@ -49,6 +58,10 @@ export const useAsync = <D>(initialState?: State<D>) => {
     })
   }
 
+  const runWithRetry = (callback: ()=>Promise<D>) =>{
+    return run(callback(),{retry: callback})
+  }
+
   return {
     isLoading: state.stat === "loading",
     isSuccess: state.stat === "success",
@@ -57,6 +70,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
     setData,
     setError,
     run,
+    runWithRetry,
+    retry,
     ...state,
   }
 }

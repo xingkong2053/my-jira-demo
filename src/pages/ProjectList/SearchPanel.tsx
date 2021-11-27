@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FunctionComponent } from "react";
-import { Param } from "./Index";
+import { Param } from "./ProjectList";
 import { Form, Input } from "antd";
 import { UserSelect } from "../../components/UserSelect";
 
