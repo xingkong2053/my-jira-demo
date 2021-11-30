@@ -29,7 +29,7 @@ interface OwnProps {}
 
 type Props = OwnProps;
 
-const ProjectList: FunctionComponent<Props> = (props) => {
+const ProjectList: FunctionComponent<Props> = () => {
   useTitle('项目列表')
   // 从url中获取query对象
   const [ param, setParam ] = useUrlQueryParam(['name','personId']);
@@ -48,7 +48,5 @@ const ProjectList: FunctionComponent<Props> = (props) => {
     <List loading={isLoading} users={userList} dataSource={projectList || []} refresh={retry}/>
   </div>);
 };
-
-ProjectList.whyDidYouRender = true
 
 export default ProjectList;
