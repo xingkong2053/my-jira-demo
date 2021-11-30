@@ -3,9 +3,9 @@ import ProjectList from "./pages/ProjectList/ProjectList";
 import { useAuth } from "./context/auth-context";
 import { Button, Dropdown, Menu } from "antd";
 import styled from "@emotion/styled";
-import { Row } from "./components/lib";
-import {ReactComponent as SoftwareLogo} from './assets/software-logo.svg'
-import { Routes, Route} from "react-router";
+import { ButtonNoPadding, Row } from "./components/lib";
+import { ReactComponent as SoftwareLogo } from "./assets/software-logo.svg";
+import { Route, Routes } from "react-router";
 import Project from "./pages/Project/Project";
 import { BrowserRouter } from "react-router-dom";
 import { resetRoute } from "./utils";
@@ -19,7 +19,7 @@ type Props = OwnProps;
 const AuthenticatedApp: FunctionComponent<Props> = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
   return <Container>
-    <PageHeader/>
+    <PageHeader setModalOpen={setModalOpen}/>
     <Main>
       <BrowserRouter>
         <Routes>
@@ -33,18 +33,17 @@ const AuthenticatedApp: FunctionComponent<Props> = (props) => {
   </Container>;
 };
 
-AuthenticatedApp.whyDidYouRender = true
 
-const PageHeader = ()=>{
+const PageHeader = (props: {setModalOpen: (isOpen: boolean)=>void})=>{
   let { logout, user } = useAuth();
   return <Header between>
     <HeaderLeft gap>
       {/* 以组件的形式渲染svg */}
-      <Button type={'link'} onClick={resetRoute}>
+      <ButtonNoPadding type={'link'} onClick={resetRoute}>
         <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
-      </Button>
-      <ProjectPopover/>
-      <h2>用户</h2>
+      </ButtonNoPadding>
+      <ProjectPopover setModalOpen={props.setModalOpen}/>
+      <span>用户</span>
     </HeaderLeft>
     <HeaderRight>
       <Dropdown
@@ -56,7 +55,6 @@ const PageHeader = ()=>{
       >
         <Button type={'link'}>Hi, {user?.name}</Button>
       </Dropdown>
-      <ProjectPopover/>
     </HeaderRight>
   </Header>
 }
@@ -78,7 +76,9 @@ const Header = styled(Row)`
   z-index: 1;
 `
 
-const HeaderLeft = styled(Row)``
+const HeaderLeft = styled(Row)`
+  cursor: pointer;
+`
 
 const HeaderRight = styled.div``
 

@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from "react";
 import { User } from "./SearchPanel";
 import { Project } from "./ProjectList";
-import { Card, Table, TableProps } from "antd";
+import { Card, Dropdown, Menu, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { ColumnsType } from "antd/lib/table";
 import { Link } from "react-router-dom";
 import Star from "../../components/Star";
 import { useEditProject } from "../../hooks/apis/project";
+import { ButtonNoPadding } from "../../components/lib";
 
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
@@ -45,11 +46,22 @@ const List: FunctionComponent<ListProps> = (props) => {
     dataIndex: 'created',
     key: 'created',
     render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
+  },{
+    render: (value,project) => <Dropdown overlay={<Menu>
+      <Menu.Item key={"edit"}>
+        <ButtonNoPadding type={"link"}>编辑</ButtonNoPadding>
+      </Menu.Item>
+      <Menu.Item key={"delete"}>
+        <ButtonNoPadding type={"link"}>删除</ButtonNoPadding>
+      </Menu.Item>
+    </Menu>}>
+      <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+    </Dropdown>
   }]
 
   let { users } = props;
   return <Card>
-    <Table pagination={false} columns={columns} {...props}/>
+    <Table pagination={false} columns={columns} rowKey={(record)=>String(record.id)} {...props}/>
   </Card>
 };
 
