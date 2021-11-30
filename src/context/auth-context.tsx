@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }: {children: ReactNode})=>{
     run(bootstrapUser())
   })
 
+  // 全屏加载
   if(isIdle || isLoading){
     return <FullPageLoading/>
   }

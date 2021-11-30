@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from "react";
 import ProjectList from "./pages/ProjectList/ProjectList";
 import { useAuth } from "./context/auth-context";
 import { Button, Dropdown, Menu } from "antd";
@@ -9,13 +9,15 @@ import { Routes, Route} from "react-router";
 import Project from "./pages/Project/Project";
 import { BrowserRouter } from "react-router-dom";
 import { resetRoute } from "./utils";
+import ProjectModal from "./pages/Project/ProjectModal";
+import ProjectPopover from "./pages/Project/ProjectPopover";
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
 const AuthenticatedApp: FunctionComponent<Props> = (props) => {
-
+  const [modalOpen, setModalOpen] = useState(false);
   return <Container>
     <PageHeader/>
     <Main>
@@ -27,8 +29,11 @@ const AuthenticatedApp: FunctionComponent<Props> = (props) => {
         </Routes>
       </BrowserRouter>
     </Main>
+    <ProjectModal open={modalOpen} onClose={()=>setModalOpen(false)}/>
   </Container>;
 };
+
+AuthenticatedApp.whyDidYouRender = true
 
 const PageHeader = ()=>{
   let { logout, user } = useAuth();
@@ -38,7 +43,7 @@ const PageHeader = ()=>{
       <Button type={'link'} onClick={resetRoute}>
         <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
       </Button>
-      <h2>项目</h2>
+      <ProjectPopover/>
       <h2>用户</h2>
     </HeaderLeft>
     <HeaderRight>
@@ -51,6 +56,7 @@ const PageHeader = ()=>{
       >
         <Button type={'link'}>Hi, {user?.name}</Button>
       </Dropdown>
+      <ProjectPopover/>
     </HeaderRight>
   </Header>
 }
@@ -77,8 +83,8 @@ const HeaderLeft = styled(Row)``
 const HeaderRight = styled.div``
 
 const Main = styled.main`grid-area: main`
-const Nav = styled.nav`grid-area: nav`
-const ASide = styled.aside`grid-area: aside`
-const Footer = styled.footer`grid-area: footer`
+// const Nav = styled.nav`grid-area: nav`
+// const ASide = styled.aside`grid-area: aside`
+// const Footer = styled.footer`grid-area: footer`
 
 export default AuthenticatedApp;

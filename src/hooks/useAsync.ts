@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useMountedRef } from "./useMountedRef";
 
 interface State<D>{
@@ -20,49 +20,42 @@ export const useAsync = <D>(initialState?: State<D>) => {
   });
   // useState直接传入函数的含义是，惰性初始化
   // retry : ()=>void
-  const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
-    return ()=>{}
-  })
-  const mountedRef = useMountedRef();
+  // const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
+  //   return ()=>{}
+  // })
+  // const retryRef = useRef<()=>void>(()=>{})
+  // const mountedRef = useMountedRef();
 
-  const setData = (data: D) => {
+  const setData = useCallback((data: D) => {
     setState({
       data,
-      stat: 'success',
-      error: null
+      error: null,
+      stat: 'success'
     })
-  }
+  },[])
 
-  const setError = (error: Error) => {
+  const setError = useCallback((error: Error) => {
     setState({
       data: null,
-      stat: 'error',
-      error
+      error,
+      stat: 'error'
     })
-  }
+  },[])
 
   // run 用来触发异步请求
-  const run = (promise : Promise<D>, runConfig?: {retry: ()=>Promise<D>})=>{
+  const run = useCallback((promise : Promise<D>, runConfig?: {retry: ()=>Promise<D>})=>{
     if (!promise || !promise.then) {
       throw new Error("请传入Promise类型数据");
     }
-    // 更新retry需要的操作
-    setRetry(()=>()=>{
-      runConfig && runConfig.retry && run(runConfig.retry(),{retry:runConfig.retry})
-    })
     setState({...state,stat: 'loading'})
     return promise.then(data=>{
-      // 当组件已经挂载并且还没卸载时设置数据
-      // 防止在已卸载的组件上设置数据从而发生错误
-      if(mountedRef.current){
-        setData(data)
-      }
+      setData(data)
       return data
     }).catch(error=>{
       setError(error)
       return Promise.reject(error)
     })
-  }
+  },[setData,setError])
 
   const runWithRetry = (callback: ()=>Promise<D>) =>{
     return run(callback(),{retry: callback})
@@ -76,8 +69,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
     setData,
     setError,
     run,
-    runWithRetry,
-    retry,
+    // runWithRetry,
+    retryRef: ()=>{},
     ...state,
   }
 }

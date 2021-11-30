@@ -11,7 +11,7 @@ import { useEditProject } from "../../hooks/apis/project";
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
   users: User[],
-  refresh?: ()=>void
+  refresh?: React.MutableRefObject<() => void>
 }
 
 const List: FunctionComponent<ListProps> = (props) => {
@@ -21,25 +21,36 @@ const List: FunctionComponent<ListProps> = (props) => {
   const {mutate} = useEditProject()
 
   const columns: ColumnsType<Project> = [{
-    title: <Star stared={true} disabled/>   ,
-    render: (value,project) => <Star stared={project.pin} onStarChange={stared => {mutate({id:project.id,pin: stared}).then(()=>props.refresh?.())} }/>
+    title: <Star stared={true} disabled/> ,
+    dataIndex: 'pin',
+    key: 'pin',
+    render: (value,project) => <Star stared={project.pin} onStarChange={stared => {mutate({id:project.id,pin: stared}).then(()=>props.refresh?.current?.())} }/>
   },{
     title: '名称',
+    dataIndex: 'name',
+    key: 'name',
     render: (value,project) => <Link to={'/projects/'+project.id}>{project.name}</Link>,
     sorter: (a,b) => a.name.localeCompare(b.name)
   },{
     title: '部门',
-    dataIndex: 'organization'
+    dataIndex: 'organization',
+    key: 'organization'
   },{
     title: '负责人',
+    dataIndex: 'personId',
+    key: 'personId',
     render: (value, project) => <span>{users.find(user=>user.id === project.personId)?.name||'未知'}</span>
   },{
     title: '创建时间',
+    dataIndex: 'created',
+    key: 'created',
     render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
   }]
 
   let { users } = props;
-  return <Card><Table pagination={false} columns={columns} {...props}/></Card>
+  return <Card>
+    <Table pagination={false} columns={columns} {...props}/>
+  </Card>
 };
 
 export default List;

@@ -1,6 +1,6 @@
 import { useHttp } from "../../utils/http";
 import { useAsync } from "../useAsync";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { cleanObject } from "../../utils";
 import { Param, Project } from "../../pages/ProjectList/ProjectList";
 
@@ -9,13 +9,13 @@ import { Param, Project } from "../../pages/ProjectList/ProjectList";
  * 获取project列表
  * @param param
  */
-export const useProjects = (param: Param = {})=>{
+export const useProjects = (param?: Param)=>{
   const client = useHttp();
-  let {data, runWithRetry, ...result } = useAsync<Project[]>();
-
+  let {data, run, ...result } = useAsync<Project[]>();
+  const getProjects = useCallback(()=>client('projects', { data: cleanObject({ ...param || {} })}),[client,param])
   useEffect(() => {
-    runWithRetry(()=>client('projects',{data: cleanObject({...param})}))
-  }, [param]);
+    run(getProjects(),{retry: getProjects})
+  }, [getProjects,run] /* 不可以把一个既不是基本类型又不是状态的变量放入依赖里，如run(),如果加入到dependency中需要用到useMemo和useCallback */);
 
   return {...result,projectList: data}
 }
