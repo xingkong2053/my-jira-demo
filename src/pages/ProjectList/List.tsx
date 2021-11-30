@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent } from "react";
 import { User } from "./SearchPanel";
 import { Project } from "./ProjectList";
 import { Card, Table, TableProps } from "antd";
@@ -11,7 +11,7 @@ import { useEditProject } from "../../hooks/apis/project";
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
   users: User[],
-  refresh?: React.MutableRefObject<() => void>
+  refresh?: ()=>void
 }
 
 const List: FunctionComponent<ListProps> = (props) => {
@@ -24,7 +24,7 @@ const List: FunctionComponent<ListProps> = (props) => {
     title: <Star stared={true} disabled/> ,
     dataIndex: 'pin',
     key: 'pin',
-    render: (value,project) => <Star stared={project.pin} onStarChange={stared => {mutate({id:project.id,pin: stared}).then(()=>props.refresh?.current?.())} }/>
+    render: (value,project) => <Star stared={project.pin} onStarChange={stared => {mutate({id:project.id,pin: stared}).then(()=>props.refresh?.())} }/>
   },{
     title: '名称',
     dataIndex: 'name',

@@ -1,5 +1,4 @@
-import { useCallback, useRef, useState } from "react";
-import { useMountedRef } from "./useMountedRef";
+import { useCallback, useState } from "react";
 
 interface State<D>{
   error: Error | null;
@@ -20,9 +19,9 @@ export const useAsync = <D>(initialState?: State<D>) => {
   });
   // useState直接传入函数的含义是，惰性初始化
   // retry : ()=>void
-  // const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
-  //   return ()=>{}
-  // })
+  const [ retry, setRetry ] = useState< ()=>void >(function lazyInit(){
+    return ()=>{}
+  })
   // const retryRef = useRef<()=>void>(()=>{})
   // const mountedRef = useMountedRef();
 
@@ -47,6 +46,9 @@ export const useAsync = <D>(initialState?: State<D>) => {
     if (!promise || !promise.then) {
       throw new Error("请传入Promise类型数据");
     }
+    setRetry(()=>()=>{
+      runConfig?.retry && run(runConfig.retry(),runConfig)
+    })
     setState({...state,stat: 'loading'})
     return promise.then(data=>{
       setData(data)
@@ -70,7 +72,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
     setError,
     run,
     // runWithRetry,
-    retryRef: ()=>{},
+    retry,
     ...state,
   }
 }
