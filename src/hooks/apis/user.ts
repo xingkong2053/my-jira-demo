@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { User } from "../../pages/ProjectList/SearchPanel";
 import useMount from "../useMount";
 import { useHttp } from "../../utils/http";
+import { User } from "../../utils/types";
 
 
 export const useUser = ()=>{

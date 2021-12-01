@@ -1,8 +1,8 @@
-import { User } from "../../pages/ProjectList/SearchPanel";
 import { createSlice } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "../index";
 import * as auth from "../../auth-provider";
-import { AuthForm, bootstrapUser } from "../../Auth";
+import { bootstrapUser } from "../../Auth";
+import { AuthForm, User } from "../../utils/types";
 
 interface State{
   user: User | null;

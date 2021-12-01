@@ -1,6 +1,6 @@
 // 在真实环境中，如果使用firebase这种第三方auth服务的话，本文件不需要开发者开发
-import { User } from "./pages/ProjectList/SearchPanel";
 import { http } from "./utils/http";
+import { AuthForm, User } from "./utils/types";
 
 const localStorageKey = "__auth_provider_token__";
 
@@ -11,7 +11,7 @@ export const handleUserResponse = ({ user }: { user: User }) => {
   return user;
 };
 
-export const login = async (data: { username: string; password: string }) => {
+export const login = async (data: AuthForm) => {
   try {
     const response = await http(`login`, {
       method: "POST",
@@ -23,10 +23,7 @@ export const login = async (data: { username: string; password: string }) => {
   }
 };
 
-export const register = async (data: {
-  username: string;
-  password: string;
-}) => {
+export const register = async (data: AuthForm) => {
   try {
     const response = await http(`register`, {
       method: "POST",

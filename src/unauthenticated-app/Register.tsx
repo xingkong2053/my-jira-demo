@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch } from "react-redux";
-import { User } from "../pages/ProjectList/SearchPanel";
 import { register } from "../store/slice/auth.slice";
+import { User } from "../utils/types";
 
 interface OwnProps {}
 

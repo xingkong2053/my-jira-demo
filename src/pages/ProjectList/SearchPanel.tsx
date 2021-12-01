@@ -1,16 +1,7 @@
 import React, { ChangeEvent, FunctionComponent } from "react";
-import { Param } from "./ProjectList";
 import { Form, Input } from "antd";
 import { UserSelect } from "../../components/UserSelect";
-
-export interface User{
-  id: string;
-  name?: string;
-  email?: string;
-  title?: string;
-  organization?: string;
-  token?: string;
-}
+import { Param, User } from "../../utils/types";
 
 interface OwnProps {
   users: User[]

@@ -1,6 +1,4 @@
 import React, { FunctionComponent } from "react";
-import { User } from "./SearchPanel";
-import { Project } from "./ProjectList";
 import { Card, Dropdown, Menu, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { ColumnsType } from "antd/lib/table";
@@ -10,6 +8,7 @@ import { useEditProject } from "../../hooks/apis/project";
 import { ButtonNoPadding } from "../../components/lib";
 import { useDispatch } from "react-redux";
 import { projectListActions } from "./ProjectList.slice";
+import { Project, User } from "../../utils/types";
 
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{

@@ -13,20 +13,6 @@ import { projectListActions } from "./ProjectList.slice";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
-export interface Project{
-  id: number;
-  pin: boolean;
-  name: string;
-  personId?: string;
-  organization?: string;
-  created?: number;
-}
-
-export interface Param{
-  name?: string;
-  personId?: string;
-}
-
 interface OwnProps {}
 
 type Props = OwnProps;

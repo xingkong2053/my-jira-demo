@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import * as auth from "./auth-provider";
-import { User } from "./pages/ProjectList/SearchPanel";
 import { http } from "./utils/http";
 import useMount from "./hooks/useMount";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -8,11 +7,7 @@ import { useAsync } from "./hooks/useAsync";
 import { FullPageError, FullPageLoading } from "./components/lib";
 import { useDispatch } from "react-redux";
 import { bootstrap } from "./store/slice/auth.slice";
-
-export interface  AuthForm {
-  username: string;
-  password: string;
-}
+import { User } from "./utils/types";
 
 // 初始化时根据token获取user
 export const bootstrapUser = async ()=>{

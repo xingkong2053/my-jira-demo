@@ -4,7 +4,7 @@ import { useAsync } from "../hooks/useAsync";
 import { useTitle } from "../hooks/useTitle";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slice/auth.slice";
-import { User } from "../pages/ProjectList/SearchPanel";
+import { User } from "../utils/types";
 
 interface OwnProps {}
 

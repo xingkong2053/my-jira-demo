@@ -2,7 +2,7 @@ import { useHttp } from "../../utils/http";
 import { useAsync } from "../useAsync";
 import { useCallback, useEffect } from "react";
 import { cleanObject } from "../../utils";
-import { Param, Project } from "../../pages/ProjectList/ProjectList";
+import { Param, Project } from "../../utils/types";
 
 
 /**

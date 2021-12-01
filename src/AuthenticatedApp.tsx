@@ -11,8 +11,8 @@ import { resetRoute } from "./utils";
 import ProjectModal from "./pages/Project/ProjectModal";
 import ProjectPopover from "./pages/Project/ProjectPopover";
 import { useDispatch, useSelector } from "react-redux";
-import { User } from "./pages/ProjectList/SearchPanel";
 import { logout, selectUser } from "./store/slice/auth.slice";
+import { User } from "./utils/types";
 
 interface OwnProps {}
 

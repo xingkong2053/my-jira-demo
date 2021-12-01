@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import Login from "./Login";
-import Register from "./register";
+import Register from "./Register";
 import { Button, Card, Divider } from "antd";
 import styled from "@emotion/styled";
 import logo from "../assets/logo.svg";
