@@ -8,6 +8,7 @@ import { useUser } from "../../hooks/apis/user";
 import { useTitle } from "../../hooks/useTitle";
 import { useUrlQueryParam } from "../../hooks/userUrlQueryParam";
 import { Row } from "../../components/lib";
+import { useProjectModal } from "../../hooks/useProjectModal";
 
 export const apiUrl = process.env.REACT_APP_API_URL
 
@@ -36,11 +37,12 @@ const ProjectList: FunctionComponent<Props> = () => {
   const debParam = useDebounce(param,200);
   let { error, isError, isLoading, projectList, retry } = useProjects(debParam);
   let { userList } = useUser();
+  const {open} = useProjectModal()
 
   return (<div style={{padding: '3.2rem'}}>
     <Row between={true}>
       <h1>项目列表</h1>
-      <Button>创建项目</Button>
+      <Button onClick={open}>创建项目</Button>
     </Row>
     <SearchPanel param={param} setParam={setParam} users={userList}/>
     {isError && <Typography.Text type={"danger"}>{error?.message}</Typography.Text>}

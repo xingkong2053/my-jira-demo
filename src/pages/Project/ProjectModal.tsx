@@ -1,16 +1,14 @@
-import React, { FunctionComponent } from 'react';
-import { Button, Modal } from "antd";
+import React, { FunctionComponent } from "react";
+import { Modal } from "antd";
+import { useProjectModal } from "../../hooks/useProjectModal";
 
-interface OwnProps {
-  open: boolean,
-  onClose: ()=>void
-}
+interface OwnProps {}
 
 type Props = OwnProps;
 
 const ProjectModal: FunctionComponent<Props> = (props) => {
-  let { open, onClose } = props;
-  return <Modal visible={open} onOk={onClose} onCancel={onClose}>
+  let { close, modalOpen } = useProjectModal();
+  return <Modal visible={modalOpen} onOk={close} onCancel={close}>
     <h1>ProjectModal</h1>
   </Modal>;
 };

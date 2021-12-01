@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import Star from "../../components/Star";
 import { useEditProject } from "../../hooks/apis/project";
 import { ButtonNoPadding } from "../../components/lib";
+import { useProjectModal } from "../../hooks/useProjectModal";
 
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
@@ -20,6 +21,7 @@ const List: FunctionComponent<ListProps> = (props) => {
   // api/project/useEditProject
   // 调用mutate发送请求
   const {mutate} = useEditProject()
+  const {open} = useProjectModal()
 
   const columns: ColumnsType<Project> = [{
     title: <Star stared={true} disabled/> ,
@@ -47,9 +49,9 @@ const List: FunctionComponent<ListProps> = (props) => {
     key: 'created',
     render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
   },{
-    render: (value,project) => <Dropdown overlay={<Menu>
+    render: () => <Dropdown overlay={<Menu>
       <Menu.Item key={"edit"}>
-        <ButtonNoPadding type={"link"}>编辑</ButtonNoPadding>
+        <ButtonNoPadding type={"link"} onClick={open}>编辑</ButtonNoPadding>
       </Menu.Item>
       <Menu.Item key={"delete"}>
         <ButtonNoPadding type={"link"}>删除</ButtonNoPadding>
