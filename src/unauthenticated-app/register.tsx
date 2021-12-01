@@ -1,16 +1,18 @@
 import React, { FunctionComponent } from "react";
-import { useAuth } from "../context/auth-context";
 import { Button, Form, Input } from "antd";
+import { useDispatch } from "react-redux";
+import { User } from "../pages/ProjectList/SearchPanel";
+import { register } from "../store/slice/auth.slice";
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
-const Regsiter: FunctionComponent<Props> = (props) => {
+const Register: FunctionComponent<Props> = () => {
 
-  const {register} = useAuth()
+  const dispatch: (...args: unknown[])=>Promise<User> = useDispatch();
 
-  return <Form onFinish={register} initialValues={{username: 'admin',password: 'admin',cpassword: 'admin'}}>
+  return <Form onFinish={form=>dispatch(register(form))} initialValues={{username: 'admin',password: 'admin',cpassword: 'admin'}}>
     <Form.Item name={'username'} rules={[{required: true, message:'请输入用户名'}]}>
       <Input type="text" id={'username'}/>
     </Form.Item>
@@ -26,4 +28,4 @@ const Regsiter: FunctionComponent<Props> = (props) => {
   </Form>;
 };
 
-export default Regsiter;
+export default Register;

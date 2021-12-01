@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
 import ProjectList from "./pages/ProjectList/ProjectList";
-import { useAuth } from "./context/auth-context";
 import { Button, Dropdown, Menu } from "antd";
 import styled from "@emotion/styled";
 import { ButtonNoPadding, Row } from "./components/lib";
@@ -11,6 +10,9 @@ import { BrowserRouter } from "react-router-dom";
 import { resetRoute } from "./utils";
 import ProjectModal from "./pages/Project/ProjectModal";
 import ProjectPopover from "./pages/Project/ProjectPopover";
+import { useDispatch, useSelector } from "react-redux";
+import { User } from "./pages/ProjectList/SearchPanel";
+import { logout, selectUser } from "./store/slice/auth.slice";
 
 interface OwnProps {}
 
@@ -35,7 +37,8 @@ const AuthenticatedApp: FunctionComponent<Props> = () => {
 
 // 顶部导航栏
 const PageHeader = ()=>{
-  let { logout, user } = useAuth();
+  const dispatch: (...args: unknown[]) => Promise<User> = useDispatch();
+  const {user} = useSelector(selectUser)
   return <Header between>
     <HeaderLeft gap>
       {/* 以组件的形式渲染svg */}
@@ -51,7 +54,7 @@ const PageHeader = ()=>{
       <Dropdown
         overlay={<Menu>
           <Menu.Item key="logout">
-            <Button onClick={logout} type={'link'}>Logout</Button>
+            <Button onClick={()=>dispatch(logout())} type={'link'}>Logout</Button>
           </Menu.Item>
         </Menu>}
       >

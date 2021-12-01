@@ -1,13 +1,14 @@
-import React from 'react';
-import './App.css';
-import { useAuth } from "./context/auth-context";
+import React from "react";
+import "./App.css";
 import AuthenticatedApp from "./AuthenticatedApp";
 import UnauthenticatedApp from "./unauthenticated-app";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { FullPageError } from "./components/lib";
+import { useSelector } from "react-redux";
+import { selectUser } from "./store/slice/auth.slice";
 
 function App() {
-  let { user } = useAuth();
+  const { user } = useSelector(selectUser);
   return (
     <div className="">
       {/*

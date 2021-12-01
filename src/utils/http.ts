@@ -1,8 +1,9 @@
 import qs from "qs";
 import * as auth from "../auth-provider";
 import { message } from "antd";
-import { useAuth } from "../context/auth-context";
 import { useCallback } from "react";
+import { useSelector } from "react-redux";
+import { selectUser } from "../store/slice/auth.slice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -47,6 +48,6 @@ export const http = async (endpoint: string, { data, token, headers, ...customCo
 };
 
 export const useHttp = () => {
-  const {user} = useAuth()
+  const {user} = useSelector(selectUser);
   return useCallback((...[endpoint,config]: Parameters<typeof http>) => http(endpoint,{...config,token:user?.token}),[user?.token])
 }

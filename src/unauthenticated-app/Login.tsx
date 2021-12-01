@@ -1,21 +1,23 @@
 import React, { FunctionComponent } from "react";
-import { useAuth } from "../context/auth-context";
 import { Alert, Button, Form, Input } from "antd";
 import { useAsync } from "../hooks/useAsync";
 import { useTitle } from "../hooks/useTitle";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slice/auth.slice";
+import { User } from "../pages/ProjectList/SearchPanel";
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
-const Login: FunctionComponent<Props> = (props) => {
+const Login: FunctionComponent<Props> = () => {
 
-  let { login } = useAuth();
   let { error, isError, isLoading, run} = useAsync();
+  const dispatch: (...args: unknown[]) => Promise<User> = useDispatch();
   useTitle('请登录')
 
   const onFinish = (form: {username: string,password: string})=>{
-    run(login(form))
+    run(dispatch(login(form)))
   }
 
   return <Form onFinish={onFinish} initialValues={{username: 'admin',password: 'admin'}}>
