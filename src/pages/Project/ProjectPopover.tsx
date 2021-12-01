@@ -3,15 +3,17 @@ import { Divider, List, Popover, Typography } from "antd";
 import { useProjects } from "../../hooks/apis/project";
 import styled from "@emotion/styled";
 import { ButtonNoPadding } from "../../components/lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "../ProjectList/ProjectList.slice";
 
 interface OwnProps {
-  setModalOpen: (isOpen: boolean)=>void;
 }
 
 type Props = OwnProps;
 
-const ProjectPopover: FunctionComponent<Props> = (props) => {
+const ProjectPopover: FunctionComponent<Props> = () => {
   const {projectList} =  useProjects()
+  const dispatch = useDispatch()
   const pinedProjects = projectList?.filter(p=>p.pin)
   const content = <Container>
     <Typography.Text type={"secondary"}>收藏项目</Typography.Text>
@@ -23,7 +25,7 @@ const ProjectPopover: FunctionComponent<Props> = (props) => {
       }
     </List>
     <Divider/>
-    <ButtonNoPadding onClick={()=>props.setModalOpen(true)} type={"link"}>创建项目</ButtonNoPadding>
+    <ButtonNoPadding onClick={()=>dispatch(projectListActions.openModal())} type={"link"}>创建项目</ButtonNoPadding>
   </Container>;
   return <Popover placement={"bottom"} content={content}>
     项目

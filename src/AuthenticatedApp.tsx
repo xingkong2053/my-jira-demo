@@ -16,10 +16,10 @@ interface OwnProps {}
 
 type Props = OwnProps;
 
-const AuthenticatedApp: FunctionComponent<Props> = (props) => {
+const AuthenticatedApp: FunctionComponent<Props> = () => {
   const [modalOpen, setModalOpen] = useState(false);
   return <Container>
-    <PageHeader setModalOpen={setModalOpen}/>
+    <PageHeader/>
     <Main>
       <BrowserRouter>
         <Routes>
@@ -33,16 +33,18 @@ const AuthenticatedApp: FunctionComponent<Props> = (props) => {
   </Container>;
 };
 
-
-const PageHeader = (props: {setModalOpen: (isOpen: boolean)=>void})=>{
+// 顶部导航栏
+const PageHeader = ()=>{
   let { logout, user } = useAuth();
   return <Header between>
     <HeaderLeft gap>
       {/* 以组件的形式渲染svg */}
+      {/* logo */}
       <ButtonNoPadding type={'link'} onClick={resetRoute}>
         <SoftwareLogo width={'18rem'} color={'rgb(38,132,255)'}/>
       </ButtonNoPadding>
-      <ProjectPopover setModalOpen={props.setModalOpen}/>
+      {/*项目*/}
+      <ProjectPopover/>
       <span>用户</span>
     </HeaderLeft>
     <HeaderRight>
