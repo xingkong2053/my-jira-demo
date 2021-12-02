@@ -13,7 +13,6 @@ import { useProjectModal } from "../../hooks/useProjectModal";
 // List属性继承antd.Table属性
 interface ListProps extends TableProps<Project>{
   users: User[],
-  refresh?: ()=>void
 }
 
 const List: FunctionComponent<ListProps> = (props) => {
@@ -27,7 +26,7 @@ const List: FunctionComponent<ListProps> = (props) => {
     title: <Star stared={true} disabled/> ,
     dataIndex: 'pin',
     key: 'pin',
-    render: (value,project) => <Star stared={project.pin} onStarChange={stared => {mutate({id:project.id,pin: stared}).then(()=>props.refresh?.())} }/>
+    render: (value,project) => <Star stared={project.pin} onStarChange={stared => { mutate({id:project.id,pin: stared})}}/>
   },{
     title: '名称',
     dataIndex: 'name',
