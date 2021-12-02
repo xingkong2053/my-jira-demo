@@ -6,7 +6,7 @@ import { Button, Typography } from "antd";
 import { useProjects } from "../../hooks/apis/project";
 import { useUser } from "../../hooks/apis/user";
 import { useTitle } from "../../hooks/useTitle";
-import { useUrlQueryParam } from "../../hooks/userUrlQueryParam";
+import { useUrlQueryParam } from "../../hooks/useUrlQueryParam";
 import { Row } from "../../components/lib";
 import { useProjectModal } from "../../hooks/useProjectModal";
 
