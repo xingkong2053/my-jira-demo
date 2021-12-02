@@ -20,7 +20,7 @@ const List: FunctionComponent<ListProps> = (props) => {
   // api/project/useEditProject
   // 调用mutate发送请求
   const {mutate} = useEditProject()
-  const {open} = useProjectModal()
+  const {startEdit} = useProjectModal()
 
   const columns: ColumnsType<Project> = [{
     title: <Star stared={true} disabled/> ,
@@ -48,9 +48,9 @@ const List: FunctionComponent<ListProps> = (props) => {
     key: 'created',
     render: (value, project) => <span>{project.created && dayjs(project.created).format('YYYY-MM-DD')}</span>
   },{
-    render: () => <Dropdown overlay={<Menu>
+    render: (value, project) => <Dropdown overlay={<Menu>
       <Menu.Item key={"edit"}>
-        <ButtonNoPadding type={"link"} onClick={open}>编辑</ButtonNoPadding>
+        <ButtonNoPadding type={"link"} onClick={()=>startEdit(project.id)}>编辑</ButtonNoPadding>
       </Menu.Item>
       <Menu.Item key={"delete"}>
         <ButtonNoPadding type={"link"}>删除</ButtonNoPadding>

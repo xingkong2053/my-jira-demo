@@ -35,7 +35,7 @@ export const useEditProject = ()=>{
 export const useAddProject = ()=>{
   const client = useHttp()
   const queryClient = useQueryClient();
-  const mutate = (params: Partial<Project>) => client("projects/" + params.id,{data: params, method: 'POST'})
+  const mutate = (params: Partial<Project>) => client("projects",{data: params, method: 'POST'})
   return useMutation(mutate,{onSuccess: ()=> queryClient.invalidateQueries('projects')})
 }
 

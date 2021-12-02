@@ -35,8 +35,8 @@ const SearchPanel: FunctionComponent<Props> = (props) => {
     })
   }
 
-  function selectChange(value: string) {
-    setParam({...param,personId: value})
+  function selectChange(value: number) {
+    setParam({...param,personId: value+''})
   }
 
   return (<Form layout={'inline'} style={{marginBottom: '2rem'}}>
