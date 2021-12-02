@@ -2,6 +2,7 @@ import { useHttp } from "../../utils/http";
 import { cleanObject } from "../../utils";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Param, Project } from "../../pages/ProjectList/ProjectList";
+import { useUrlQueryParam } from "../useUrlQueryParam";
 
 
 /**
@@ -20,12 +21,25 @@ export const useProjects = (param?: Param)=>{
 export const useEditProject = ()=>{
   const client = useHttp()
   const queryClient = useQueryClient();
-
+  const [searchParams] = useUrlQueryParam(['name','personId']);
+  const queryKey = ['projects',searchParams]
   // https://react-query.tanstack.com/reference/useMutation#_top
   return useMutation((params: Partial<Project>)=>client("projects/" + params.id,{data: params, method: 'PATCH'}),
     {
       //更新之后使projects缓存失效
-      onSuccess: ()=> queryClient.invalidateQueries('projects')
+      onSuccess: ()=> queryClient.invalidateQueries(queryKey),
+      // 乐观更新
+      // 在请求之前将数据更新为期望的值
+      // 如果请求出现错误，则回滚
+      async onMutate(target){
+        const prevItems: Project[] | undefined = queryClient.getQueryData(queryKey)
+        queryClient.setQueryData(queryKey,prevItems?.map(p => p.id === target.id ? {...p,...target}:p) || [])
+        // 返回context
+        return {prevItems}
+      },
+      onError(error,newItem,context){
+        queryClient.setQueryData(queryKey,(context as any).prevItems)
+      }
     })
 }
 
