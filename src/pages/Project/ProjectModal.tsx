@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Form, Input, Modal, Spin } from "antd";
 import { useProjectModal } from "../../hooks/useProjectModal";
 import { UserSelect } from "../../components/UserSelect";
@@ -11,14 +11,25 @@ type Props = OwnProps;
 
 const ProjectModal: FunctionComponent<Props> = () => {
   const { close, modalOpen, projectDetail, isLoading } = useProjectModal();
-  const useMutateProject = projectDetail ? useEditProject: useAddProject
-  const {mutateAsync, isLoading: mutateLoading} = useMutateProject()
+  const {mutateAsync: mutateEdit,isLoading: loadingEdit} = useEditProject()
+  const {mutateAsync: mutateAdd,isLoading: loadingAdd} = useAddProject()
+  const [mutateLoading,setMutateLoading] = useState(false)
+  // 踩坑：Don’t call Hooks inside loops, conditions, or nested functions.
+  // https://reactjs.org/docs/hooks-rules.html
+  // const useMutateProject = projectDetail ? useEditProject: useAddProject
   const [form] = useForm()
   const onFinish = (values: any)=>{
-    mutateAsync({...projectDetail, ...values}).then(() => {
-      form.resetFields()
-      close()
-    })
+    if(projectDetail){
+      mutateEdit({...projectDetail, ...values}).then(() => {
+        form.resetFields()
+        close()
+      })
+    } else {
+      mutateAdd({...values}).then(() => {
+        form.resetFields()
+        close()
+      })
+    }
   }
 
   useEffect(() => {
@@ -36,11 +47,14 @@ const ProjectModal: FunctionComponent<Props> = () => {
     form.submit()
   }
 
+  useEffect(() => {
+    setMutateLoading((projectDetail && loadingEdit) || (!projectDetail && loadingAdd))
+  }, [projectDetail,loadingAdd,loadingEdit]);
 
-  return <Modal visible={modalOpen} onCancel={onCancel} onOk={onOk} forceRender okButtonProps={{loading:mutateLoading}}>
+  return <Modal visible={modalOpen} onCancel={onCancel} onOk={onOk} forceRender okButtonProps={{loading:mutateLoading}} okText={'提交'} cancelText={'取消'}>
     {
       isLoading ? <Spin size={"large"}/> : <>
-        <Form form={form} labelCol={{span: 6}} wrapperCol={{span: 18}} onFinish={onFinish}>
+        <Form form={form} labelCol={{span: 6}} wrapperCol={{span: 18}} onFinish={onFinish} initialValues={{personId: ""}}>
           <Form.Item wrapperCol={{offset: 6,span: 18}}>
             <h3>{projectDetail? '编辑项目':'创建项目'}</h3>
           </Form.Item>
