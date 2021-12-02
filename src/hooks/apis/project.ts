@@ -1,8 +1,7 @@
 import { useHttp } from "../../utils/http";
-import { useAsync } from "../useAsync";
-import { useCallback, useEffect } from "react";
 import { cleanObject } from "../../utils";
 import { Param, Project } from "../../utils/types";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 
 /**
@@ -11,41 +10,36 @@ import { Param, Project } from "../../utils/types";
  */
 export const useProjects = (param?: Param)=>{
   const client = useHttp();
-  let {data, run, ...result } = useAsync<Project[]>();
-  const getProjects = useCallback(()=>client('projects', { data: cleanObject({ ...param || {} })}),[client,param])
-  useEffect(() => {
-    run(getProjects(),{retry: getProjects})
-  }, [getProjects,run] /* 不可以把一个既不是基本类型又不是状态的变量放入依赖里，如run(),如果加入到dependency中需要用到useMemo和useCallback */);
-
-  return {...result,projectList: data}
+  const {data: projectList, ...rest} = useQuery<Project[],Error>(['projects', param], ()=>client('projects',{ data: cleanObject({ ...param || {} })}))
+  return { projectList , ...rest}
 }
 
 /**
  * 更新project
  */
 export const useEditProject = ()=>{
-  const {run, ...asyncResult} = useAsync()
   const client = useHttp()
-  const mutate = (params: Partial<Project>) => {
-    return run(client("projects/" + params.id,{data: params, method: 'PATCH'}))
-  }
-  return {
-    mutate,
-    ...asyncResult
-  }
+  const queryClient = useQueryClient();
+
+  // https://react-query.tanstack.com/reference/useMutation#_top
+  return useMutation((params: Partial<Project>)=>client("projects/" + params.id,{data: params, method: 'PATCH'}),
+    {
+      //更新之后使projects缓存失效
+      onSuccess: ()=> queryClient.invalidateQueries('projects')
+    })
 }
 
 /**
  * 添加project
  */
 export const useAddProject = ()=>{
-  const {run, ...asyncResult} = useAsync()
   const client = useHttp()
-  const mutate = (params: Partial<Project>) => {
-    return run(client("projects/" + params.id,{data: params, method: 'POST'}))
-  }
-  return {
-    mutate,
-    ...asyncResult
-  }
+  const queryClient = useQueryClient();
+  const mutate = (params: Partial<Project>) => client("projects/" + params.id,{data: params, method: 'POST'})
+  return useMutation(mutate,{onSuccess: ()=> queryClient.invalidateQueries('projects')})
+}
+
+export const useProjectDetail = (id?: number) =>{
+  const client = useHttp();
+  return useQuery(['project',{id}],()=> client("projects/"+id),{enabled: !!id/*当id为空时不发送请求*/})
 }
