@@ -1,10 +1,11 @@
-import { useUrlQueryParam } from "./useUrlQueryParam";
+import { useClearQueryParam, useUrlQueryParam } from "./useUrlQueryParam";
 import { useProjectDetail } from "./apis/project";
 
 // 使用urlParam来管理ProjectModal状态
 export const useProjectModal = () => {
-  const [{projectCreate}, setProjectCreate,clearParam] = useUrlQueryParam(['projectCreate']);
+  const [{projectCreate}, setProjectCreate] = useUrlQueryParam(['projectCreate']);
   const [{editingProjectId},setEditingProjectId] = useUrlQueryParam(['editingProjectId'])
+  const clearQueryParam = useClearQueryParam();
   const {data: projectDetail, isLoading} = useProjectDetail(Number(editingProjectId))
 
   // 打开创建项目
@@ -13,7 +14,7 @@ export const useProjectModal = () => {
   const startEdit = (id: number) => setEditingProjectId({editingProjectId: id})
 
   const close = () => {
-    clearParam(['projectCreate','editingProjectId'])
+    clearQueryParam(['projectCreate','editingProjectId'])
   }
 
   return {

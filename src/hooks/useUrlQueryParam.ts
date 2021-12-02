@@ -18,11 +18,18 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) =>{
       // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries
       const o = cleanObject({...Object.fromEntries(searchParams),...params} ) as URLSearchParamsInit
       return setSearchParams(o)
-    },
-    //清除searchParams中指定的键值对
-    <T extends string>(keys: T[])=>{
-      const undefinedKeys = keys.reduce((prev,key)=>({...prev,[key]: undefined}),{})
-      setSearchParams(cleanObject({...Object.fromEntries(searchParams),...undefinedKeys}) as URLSearchParamsInit)
     }
   ] as const
+}
+
+/**
+ * 清除url query中指定的键值
+ */
+export const useClearQueryParam = () => {
+  const  [searchParams,setSearchParams] = useSearchParams();
+  //清除searchParams中指定的键值对
+  return <T extends string>(keys: T[])=>{
+    const undefinedKeys = keys.reduce((prev,key)=>({...prev,[key]: undefined}),{})
+    setSearchParams(cleanObject({...Object.fromEntries(searchParams),...undefinedKeys}) as URLSearchParamsInit)
+  }
 }
