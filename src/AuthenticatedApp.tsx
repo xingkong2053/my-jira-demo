@@ -17,7 +17,7 @@ interface OwnProps {}
 
 type Props = OwnProps;
 
-const AuthenticatedApp: FunctionComponent<Props> = (props) => {
+const AuthenticatedApp: FunctionComponent<Props> = () => {
   // const [modalOpen, setModalOpen] = useState(false);
   // let { close, modalOpen, open } = useProjectModal();
   return <Container>
@@ -64,11 +64,10 @@ const PageHeader = ()=>{
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 6rem 1fr 6rem;
+  grid-template-rows: 6rem 1fr;
   grid-template-columns: 20rem 1fr 20rem;
   grid-template-areas: "header header header"
-                        "main main main"
-                        "footer footer footer";
+                        "main main main";
   height: 100vh;
 `
 
@@ -85,7 +84,10 @@ const HeaderLeft = styled(Row)`
 
 const HeaderRight = styled.div``
 
-const Main = styled.main`grid-area: main`
+const Main = styled.main`
+  grid-area: main;
+  display: flex;
+`
 // const Nav = styled.nav`grid-area: nav`
 // const ASide = styled.aside`grid-area: aside`
 // const Footer = styled.footer`grid-area: footer`
