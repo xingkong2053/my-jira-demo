@@ -10,6 +10,7 @@ import { Spin } from "antd";
 import CreateDashboard from "./CreateDashboard";
 import TaskModal from "./TaskModal";
 import { ScreenContainer } from "../../components/lib";
+import useDebounce from "../../hooks/useDebounce";
 
 interface OwnProps {}
 
@@ -19,7 +20,8 @@ const Dashboard: FunctionComponent<Props> = () => {
   useTitle("看板列表")
   const { data: dashboards, isLoading: dashboardIsLoading } = useDashBoards(useDashboardSearchParams())
   const [taskSearchParams] = useTaskSearchParams()
-  const {isLoading: taskIsLoading} = useTasks(taskSearchParams)
+  const debParam = useDebounce(taskSearchParams,200)
+  const {isLoading: taskIsLoading} = useTasks(debParam)
   const { data: curProject } = useProjectInUrl();
   const isLoading = dashboardIsLoading && taskIsLoading
   return (<ScreenContainer>

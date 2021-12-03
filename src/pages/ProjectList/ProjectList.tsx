@@ -39,7 +39,7 @@ const ProjectList: FunctionComponent<Props> = () => {
   let { userList } = useUser();
   const {open} = useProjectModal()
 
-  return (<div style={{padding: '3.2rem'}}>
+  return (<div style={{padding: '3.2rem',flex:1}}>
     <Row between={true}>
       <h1>项目列表</h1>
       <Button onClick={open}>创建项目</Button>

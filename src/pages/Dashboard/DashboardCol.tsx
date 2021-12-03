@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import { Card } from "antd";
 import CreateTask from "./CreateTask";
 import { useTaskModal } from "../../hooks/useTaskModal";
+import Mark from "../../components/Mark";
 
 interface OwnProps {
   dashboard: Dashboard
@@ -28,8 +29,10 @@ const DashboardCol: FunctionComponent<Props> = (props) => {
     <TaskContainer>
       {
         tasks?.map(task => <Card onClick={()=>starEdit(task.id)} style={{marginBottom: '.5rem',cursor: 'pointer'}} key={task.id}>
-          <div>{task.name}</div>
-          <TaskTypeIcon id={task.typeId}/>
+          <Mark content={task.name} keyword={params.name}/>
+          <div>
+            <TaskTypeIcon id={task.typeId}/>
+          </div>
         </Card>)
       }
       <CreateTask dashboardId={dashboard.id}/>
