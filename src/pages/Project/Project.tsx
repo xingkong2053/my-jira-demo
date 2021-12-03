@@ -1,14 +1,14 @@
-import React, { FunctionComponent } from 'react';
-import { Link} from "react-router-dom";
+import React, { FunctionComponent } from "react";
+import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import Dashboard from "./Dashboard";
 import Group from "./Group";
+import Dashboard from "../Dashboard/Dashboard";
 
 interface OwnProps {}
 
 type Props = OwnProps;
 
-const Project: FunctionComponent<Props> = (props) => {
+const Project: FunctionComponent<Props> = () => {
 
   return (<>
     <div>
