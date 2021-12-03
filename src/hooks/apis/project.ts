@@ -53,6 +53,20 @@ export const useAddProject = ()=>{
   return useMutation(mutate,{onSuccess: ()=> queryClient.invalidateQueries('projects')})
 }
 
+/**
+ * 删除project
+ */
+export const useDeleteProject = () => {
+  const client = useHttp()
+  const queryClient = useQueryClient();
+  return useMutation(
+    ({id}:{id: number})=>client('projects/'+id,{method: 'DELETE'}),
+    {
+      onSuccess:()=>queryClient.invalidateQueries('projects')
+    })
+}
+
+
 export const useProjectDetail = (id?: number) =>{
   const client = useHttp();
   return useQuery(['project',{id}],()=> client("projects/"+id),{enabled: !!id/*当id为空时不发送请求*/})

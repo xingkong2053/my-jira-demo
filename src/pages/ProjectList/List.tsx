@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { User } from "./SearchPanel";
 import { Project } from "./ProjectList";
-import { Card, Dropdown, Menu, Table, TableProps } from "antd";
+import { Card, Dropdown, Menu, Modal, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { ColumnsType } from "antd/lib/table";
 import { Link } from "react-router-dom";
 import Star from "../../components/Star";
-import { useEditProject } from "../../hooks/apis/project";
+import { useDeleteProject, useEditProject } from "../../hooks/apis/project";
 import { ButtonNoPadding } from "../../components/lib";
 import { useProjectModal } from "../../hooks/useProjectModal";
 
@@ -21,6 +21,18 @@ const List: FunctionComponent<ListProps> = (props) => {
   // 调用mutate发送请求
   const {mutate} = useEditProject()
   const {startEdit} = useProjectModal()
+  const {mutateAsync: deleteProject} = useDeleteProject()
+
+  function openModal(id: number) {
+    Modal.confirm({
+      okText: '确定',
+      cancelText: '取消',
+      title: '确定删除项目吗？',
+      onOk(){
+        return deleteProject({id})
+      }
+    })
+  }
 
   const columns: ColumnsType<Project> = [{
     title: <Star stared={true} disabled/> ,
@@ -53,7 +65,7 @@ const List: FunctionComponent<ListProps> = (props) => {
         <ButtonNoPadding type={"link"} onClick={()=>startEdit(project.id)}>编辑</ButtonNoPadding>
       </Menu.Item>
       <Menu.Item key={"delete"}>
-        <ButtonNoPadding type={"link"}>删除</ButtonNoPadding>
+        <ButtonNoPadding type={"link"} onClick={()=>openModal(project.id)}>删除</ButtonNoPadding>
       </Menu.Item>
     </Menu>}>
       <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
