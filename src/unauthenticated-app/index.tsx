@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import Login from "./Login";
-import Regsiter from "./register";
+import Register from "./Register";
 import { Button, Card, Divider } from "antd";
 import styled from "@emotion/styled";
 import logo from "../assets/logo.svg";
@@ -12,7 +12,7 @@ interface OwnProps {}
 
 type Props = OwnProps;
 
-const UnauthenticatedApp: FunctionComponent<Props> = (props) => {
+const UnauthenticatedApp: FunctionComponent<Props> = () => {
 
   const [isRegister, setIsRegister] = useState(false);
 
@@ -21,7 +21,7 @@ const UnauthenticatedApp: FunctionComponent<Props> = (props) => {
       <Header/>
       <ShadowCard>
         <Title>{isRegister?'Register':'Login'}</Title>
-        {isRegister?<Regsiter/>:<Login/>}
+        {isRegister?<Register/>:<Login/>}
         <Divider/>
         <Button onClick={()=>setIsRegister(!isRegister)} type={'link'}>Switch To {isRegister?'Login':'Register'}</Button>
       </ShadowCard>

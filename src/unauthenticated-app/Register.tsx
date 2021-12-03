@@ -6,7 +6,7 @@ interface OwnProps {}
 
 type Props = OwnProps;
 
-const Regsiter: FunctionComponent<Props> = (props) => {
+const Register: FunctionComponent<Props> = () => {
 
   const {register} = useAuth()
 
@@ -26,4 +26,4 @@ const Regsiter: FunctionComponent<Props> = (props) => {
   </Form>;
 };
 
-export default Regsiter;
+export default Register;
