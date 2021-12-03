@@ -3,6 +3,7 @@ import { useProjectDetail } from "./apis/project";
 import { useUrlQueryParam } from "./useUrlQueryParam";
 import { useMemo } from "react";
 import { Task } from "../types";
+import useDebounce from "./useDebounce";
 
 export const useProjectIdUrl = () => {
   const {pathname} = useLocation()
@@ -18,6 +19,7 @@ export const useDashboardQueryKey = () => ['kanbans', useDashboardSearchParams()
 
 export const useTaskSearchParams = () => {
   const [ param, setTaskSearchParams ] = useUrlQueryParam(['name','typeId','processorId','tagId']);
+  const name = useDebounce(param.name,200)
   const projectId = useProjectIdUrl()
   return [
     useMemo(()=>({
@@ -25,8 +27,8 @@ export const useTaskSearchParams = () => {
         typeId: Number(param.typeId) || undefined,
         processorId: Number(param.processorId) || undefined,
         // tagId: Number(param.tagId) || undefined,
-        name: param.name
-      } as Partial<Task>),[projectId,param]),
+        name
+      } as Partial<Task>),[projectId,param,name]),
     setTaskSearchParams
   ] as const /*注意返回元组类型需要加上as const*/
 }
