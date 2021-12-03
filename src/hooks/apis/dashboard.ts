@@ -15,3 +15,11 @@ export const useAddDashboard = (queryKey: QueryKey)=>{
   const mutate = (params: Partial<Dashboard>) => client("kanbans",{data: params, method: 'POST'})
   return useMutation(mutate,{onSuccess: ()=> queryClient.invalidateQueries(queryKey)})
 }
+
+export const useDeleteDashboard = (queryKey: QueryKey) => {
+  const client = useHttp()
+  const queryClient = useQueryClient()
+  return useMutation(({id}:{id: number})=>client('kanbans/'+id,{method: 'DELETE'}),{
+    onSuccess: ()=>queryClient.invalidateQueries(queryKey)
+  })
+}

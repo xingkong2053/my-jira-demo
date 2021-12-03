@@ -45,3 +45,12 @@ export const useTaskDetail = (id?: number) =>{
   const client = useHttp();
   return useQuery(['task',{id}],()=> client("tasks/"+id),{enabled: !!id/*当id为空时不发送请求*/})
 }
+
+export const useDeleteTask = () => {
+  const client = useHttp()
+  const taskQueryKey = useTaskQueryKey();
+  const queryClient = useQueryClient()
+  return useMutation(({id}:{id: number})=>client('tasks/'+id,{method: 'DELETE'}),{
+    onSuccess: () => queryClient.invalidateQueries(taskQueryKey)
+  })
+}
