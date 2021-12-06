@@ -1,4 +1,7 @@
->开启mock服务器：`json-server --watch db.json`
+# My Jira Demo
+> > personal project, for study use
+> 
+> 开启mock服务器：`json-server --watch db.json`
 
 ### 跨组件状态管理总结
 1. 小场面：**状态提升** / **组合组件**
