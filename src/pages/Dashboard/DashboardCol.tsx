@@ -12,6 +12,7 @@ import { useTaskModal } from "../../hooks/useTaskModal";
 import Mark from "../../components/Mark";
 import { useDeleteDashboard } from "../../hooks/apis/dashboard";
 import { Row } from "../../components/lib";
+import { Drag, Drop, DropChild } from "../../components/DragAndDrop";
 
 interface OwnProps {
   dashboard: Dashboard
@@ -31,14 +32,22 @@ const DashboardCol: FunctionComponent<Props> = React.forwardRef<HTMLDivElement,{
       <More dashboard={dashboard} key={dashboard.id}/>
     </Row>
     <TaskContainer>
-      {
-        tasks?.map(task => <Card onClick={()=>starEdit(task.id)} style={{marginBottom: '.5rem',cursor: 'pointer'}} key={task.id}>
-          <Mark content={task.name} keyword={params.name}/>
-          <div>
-            <TaskTypeIcon id={task.typeId}/>
-          </div>
-        </Card>)
-      }
+      <Drop type={"ROW"} direction={'vertical'} droppableId={''+dashboard.id}>
+        <DropChild style={{minHeight: '5px'}}>
+          {
+            tasks?.map((task, index) => <Drag key={task.id} index={index} draggableId={''+task.id}>
+              <div>
+                <Card onClick={()=>starEdit(task.id)} style={{marginBottom: '.5rem',cursor: 'pointer'}} key={task.id}>
+                  <Mark content={task.name} keyword={params.name}/>
+                  <div>
+                    <TaskTypeIcon id={task.typeId}/>
+                  </div>
+                </Card>
+              </div>
+            </Drag>)
+          }
+        </DropChild>
+      </Drop>
       <CreateTask dashboardId={dashboard.id}/>
     </TaskContainer>
   </Container>);

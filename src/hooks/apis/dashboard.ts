@@ -1,4 +1,4 @@
-import { Dashboard } from "../../types";
+import { Dashboard, SortProps } from "../../types";
 import { useHttp } from "../../utils/http";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 
@@ -21,5 +21,18 @@ export const useDeleteDashboard = (queryKey: QueryKey) => {
   const queryClient = useQueryClient()
   return useMutation(({id}:{id: number})=>client('kanbans/'+id,{method: 'DELETE'}),{
     onSuccess: ()=>queryClient.invalidateQueries(queryKey)
+  })
+}
+
+/**
+ * 看板拖拽持久化
+ */
+export const useReorderDashboard = () => {
+  const client = useHttp();
+  return useMutation((params: SortProps) => {
+   return client('kanbans/reorder', {
+     data: params,
+     method: 'POST'
+    })
   })
 }

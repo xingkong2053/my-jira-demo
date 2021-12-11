@@ -1,4 +1,4 @@
-import { Task } from "../../types";
+import { SortProps, Task } from "../../types";
 import { useHttp } from "../../utils/http";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { useTaskQueryKey } from "../useProjectIdUrl";
@@ -52,5 +52,18 @@ export const useDeleteTask = () => {
   const queryClient = useQueryClient()
   return useMutation(({id}:{id: number})=>client('tasks/'+id,{method: 'DELETE'}),{
     onSuccess: () => queryClient.invalidateQueries(taskQueryKey)
+  })
+}
+
+/**
+ * 看板拖拽持久化
+ */
+export const useReorderTask = () => {
+  const client = useHttp();
+  return useMutation((params: SortProps) => {
+    return client('tasks/reorder', {
+      data: params,
+      method: 'POST'
+    })
   })
 }

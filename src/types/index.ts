@@ -20,3 +20,13 @@ export interface TaskType{
   id: number;
   name: string;
 }
+
+export interface SortProps {
+  // 要重新排序的 Item
+  fromId?: number;
+  // 目标 Item
+  referenceId?: number;
+  type: "before" | "after";
+  fromDashboardId?: number;
+  toDashboardId?: number;
+}
