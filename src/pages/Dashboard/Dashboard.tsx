@@ -11,6 +11,8 @@ import CreateDashboard from "./CreateDashboard";
 import TaskModal from "./TaskModal";
 import { ScreenContainer } from "../../components/lib";
 import useDebounce from "../../hooks/useDebounce";
+import { DragDropContext } from "react-beautiful-dnd";
+import { Drag, Drop, DropChild } from "../../components/DragAndDrop";
 
 interface OwnProps {}
 
@@ -24,18 +26,22 @@ const Dashboard: FunctionComponent<Props> = () => {
   const {isLoading: taskIsLoading} = useTasks(debParam)
   const { data: curProject } = useProjectInUrl();
   const isLoading = dashboardIsLoading && taskIsLoading
-  return (<ScreenContainer>
-    <h1>{curProject?.name}看板</h1>
-    <SearchPanel/>
-    {isLoading ? <Spin size={"large"}/> : <ColumnsContainer>
-      {dashboards?.map(dashboard=><DashboardCol dashboard={dashboard} key={dashboard.id}/>)}
-      <CreateDashboard/>
-    </ColumnsContainer>}
-    <TaskModal/>
-  </ScreenContainer>);
+  return <DragDropContext onDragEnd={()=>{}}>
+    <ScreenContainer>
+      <h1>{curProject?.name}看板</h1>
+      <SearchPanel/>
+      {isLoading ? <Spin size={"large"}/> : <Drop type={"COLUMN"} direction={"horizontal"} droppableId={'dashboard'}>
+        <ColumnsContainer>
+          {dashboards?.map((dashboard ,index)=><Drag key={dashboard.id} draggableId={'dashboard'+dashboard.id} index={index}><DashboardCol dashboard={dashboard} /></Drag>)}
+          <CreateDashboard/>
+        </ColumnsContainer>
+      </Drop>}
+      <TaskModal/>
+    </ScreenContainer>
+  </DragDropContext>;
 };
 
-export const ColumnsContainer = styled.div`
+export const ColumnsContainer = styled(DropChild)`
   display: flex;
   overflow-x: scroll;
   margin-right: 2rem;

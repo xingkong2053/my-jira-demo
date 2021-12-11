@@ -19,17 +19,16 @@ interface OwnProps {
 
 type Props = OwnProps;
 
-const DashboardCol: FunctionComponent<Props> = (props) => {
-  const {dashboard} = props
+const DashboardCol: FunctionComponent<Props> = React.forwardRef<HTMLDivElement,{dashboard: Dashboard}>(({ dashboard, ...props },ref) => {
   const [params] = useTaskSearchParams()
   const { data: allTasks } = useTasks(params);
   const {starEdit} = useTaskModal()
   const tasks = allTasks?.filter(task=>task.kanbanId === dashboard.id)
 
-  return (<Container>
+  return (<Container ref={ref} {...props}>
     <Row between={true}>
       <h3>{dashboard.name}</h3>
-      <More dashboard={dashboard}/>
+      <More dashboard={dashboard} key={dashboard.id}/>
     </Row>
     <TaskContainer>
       {
@@ -43,7 +42,7 @@ const DashboardCol: FunctionComponent<Props> = (props) => {
       <CreateTask dashboardId={dashboard.id}/>
     </TaskContainer>
   </Container>);
-};
+});
 
 const TaskTypeIcon = ({id}: {id: number}) => {
   const {data: taskTypes} = useTaskTypes()
